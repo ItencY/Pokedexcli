@@ -10,10 +10,14 @@ import (
 type cliCommand struct {
 	name        string
 	description string
-	callback    func() error
+	callback    func(*config) error
 }
 
-func startRepl() {
+type config struct {
+	commands map[string]cliCommand
+}
+
+func startRepl(cfg *config) {
 	scanner := bufio.NewScanner(os.Stdin)
 	for {
 		fmt.Print("Pokedex > ")
@@ -21,12 +25,12 @@ func startRepl() {
 			break
 		}
 		input := scanner.Text()
-		cmd, ok := getCommands()[cleanInput(input)[0]]
+		cmd, ok := cfg.commands[cleanInput(input)[0]]
 		if !ok {
 			fmt.Println("Unknown command")
 			continue
 		}
-		if err := cmd.callback(); err != nil {
+		if err := cmd.callback(cfg); err != nil {
 			fmt.Println("Error executing command:", err)
 		}
 	}
