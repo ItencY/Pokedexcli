@@ -11,11 +11,16 @@ func startRepl() {
 	scanner := bufio.NewScanner(os.Stdin)
 	for {
 		fmt.Print("Pokedex > ")
-		scanner.Scan()
+		if !scanner.Scan() {
+			break
+		}
 		input := scanner.Text()
 		firstWord := strings.Split(input, " ")[0]
 		loweredFirstWord := strings.ToLower(firstWord)
 		fmt.Printf("Your command was: %s\n", loweredFirstWord)
+	}
+	if err := scanner.Err(); err != nil {
+		fmt.Fprintln(os.Stderr, "reading input:", err)
 	}
 }
 
