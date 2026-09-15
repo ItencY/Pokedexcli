@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	pokeapiClient := pokeapi.NewClient(5 * time.Second)
+	pokeapiClient := pokeapi.NewClient(5*time.Second, time.Minute*5)
 	cfg := &config{
 		commands:      getCommands(),
 		pokeapiClient: pokeapiClient,
