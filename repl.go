@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/itency/pokedexcli/internal/pokeapi"
 )
 
 type cliCommand struct {
@@ -14,7 +16,10 @@ type cliCommand struct {
 }
 
 type config struct {
-	commands map[string]cliCommand
+	commands         map[string]cliCommand
+	pokeapiClient    pokeapi.Client
+	nextLocationsURL *string
+	prevLocationsURL *string
 }
 
 func startRepl(cfg *config) {
@@ -62,6 +67,16 @@ func getCommands() map[string]cliCommand {
 			name:        "help",
 			description: "Displays a help message",
 			callback:    commandHelp,
+		},
+		"map": {
+			name:        "map",
+			description: "Displays the next page of locations",
+			callback:    commandMapf,
+		},
+		"mapb": {
+			name:        "mapb",
+			description: "Displays the previous page of locations",
+			callback:    commandMapb,
 		},
 	}
 }
